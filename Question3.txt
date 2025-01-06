@@ -1,0 +1,18 @@
+Yes, Django signals run in the same database transaction as the caller by default. The intentional exception in the signal handler rolls back the entire transaction, proving that the signal runs in the same transaction as the caller.
+Here is the example:
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import User
+from django.db import transaction
+@receiver(post_save, sender=User)
+def my_signal_handler(sender, instance, **kwargs):
+    print("Signal started...")
+    if kwargs.get('created'):
+        raise Exception("Rolling back transaction!")  # Intentional error
+from django.contrib.auth.models import User
+try:
+    user = User.objects.create(username="test_user")
+except Exception as e:
+    print(f"Exception caught: {e}")
+print(User.objects.filter(username="test_user").exists())  # Should print False
