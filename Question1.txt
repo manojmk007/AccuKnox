@@ -1,0 +1,18 @@
+By default, Django signals are executed synchronously.
+Here is the exapmle:
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import User
+import time
+@receiver(post_save, sender=User)
+def my_signal_handler(sender, instance, **kwargs):
+    print("Signal started...")
+    time.sleep(5)  # Simulate a time-consuming operation
+    print("Signal finished.")
+import time
+from django.contrib.auth.models import User
+start_time = time.time()
+user = User.objects.create(username="test_user")
+end_time = time.time()
+print(f"Time taken: {end_time - start_time} seconds")
