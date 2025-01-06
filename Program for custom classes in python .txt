@@ -1,0 +1,21 @@
+This is my code for the creating a Rectangle class,
+
+Code:
+class Rectangle:
+    def __init__(self, length: int, width: int):
+        self.length = length
+        self.width = width
+    def __iter__(self):
+        yield {'length': self.length}
+        yield {'width': self.width}
+
+# this is the sample usage by me
+rect = Rectangle(10, 20)
+for attr in rect:
+    print(attr)
+
+Output:
+{'length': 10}
+{'width': 20}
+
+
